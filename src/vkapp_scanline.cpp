@@ -193,9 +193,13 @@ void VkApp::createScPipeline()
     if ( result != VK_SUCCESS )
         throw std::runtime_error( std::string("Failure to create pipeline layout: ") + string_VkResult(result) );
 
-
+#ifdef _WINDOWS_
+    VkShaderModule fragShaderModule = createShaderModule(loadFile("spv/scanline.frag.spv"));
+    VkShaderModule vertShaderModule = createShaderModule(loadFile("spv/scanline.vert.spv"));
+#else
     VkShaderModule vertShaderModule = createShaderModule(loadFile("src/spv/scanline.vert.spv"));
     VkShaderModule fragShaderModule = createShaderModule(loadFile("src/spv/scanline.frag.spv"));
+#endif
 
     VkPipelineShaderStageCreateInfo
         vertShaderStageInfo{VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};

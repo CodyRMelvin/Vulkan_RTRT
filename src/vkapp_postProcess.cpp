@@ -132,8 +132,13 @@ void VkApp::createPostPipeline()
     ////////////////////////////////////////////
     // Create the shaders
     ////////////////////////////////////////////
+#ifdef _WINDOWS_
+    VkShaderModule vertShaderModule = createShaderModule(loadFile("spv/post.vert.spv"));
+    VkShaderModule fragShaderModule = createShaderModule(loadFile("spv/post.frag.spv"));
+#else
     VkShaderModule vertShaderModule = createShaderModule(loadFile("src/spv/post.vert.spv"));
     VkShaderModule fragShaderModule = createShaderModule(loadFile("src/spv/post.frag.spv"));
+#endif
 
     VkPipelineShaderStageCreateInfo
         vertShaderStageInfo{VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};

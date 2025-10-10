@@ -69,7 +69,11 @@ void VkApp::loadModel()
     scLightPos = vec3(21.0f, 20.4f, 2.3);
 #else
     // Included with this framework.
+#ifdef _WINDOWS_
+    std::string modelFile = "models/living_room/living_room.obj";
+#else
     std::string modelFile = "src/models/living_room/living_room.obj";
+#endif
     app->myCamera.reset(glm::vec3(2.28, 1.68, 6.64),    0.7, -20.0,   10.66,  0.57, 0.1, 1000.0);
     scLightAmb = vec3(0.2);
     scLightInt = vec3(1.0f);
