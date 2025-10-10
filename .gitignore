@@ -1,0 +1,7 @@
+
+/build/
+/bin/
+/src/spv/
+/.cache/
+*.gfxr
+
