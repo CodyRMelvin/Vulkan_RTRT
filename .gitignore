@@ -6,5 +6,8 @@
 /src/x64/
 /src/.idea/
 /src/.vs/
+/src/rtrt/
+/src/assimp.dll
+*.user
 *.gfxr
 
