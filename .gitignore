@@ -3,5 +3,8 @@
 /bin/
 /src/spv/
 /.cache/
+/src/x64/
+/src/.idea/
+/src/.vs/
 *.gfxr
 
