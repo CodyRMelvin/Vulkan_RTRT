@@ -1,0 +1,21 @@
+app.o: app.cpp vkapp.h shaders/shared_structs.h buffer_wrap.h \
+ descriptor_wrap.h acceleration_wrap.h app.h camera.h extensions_vk.hpp
+camera.o: camera.cpp vkapp.h shaders/shared_structs.h buffer_wrap.h \
+ descriptor_wrap.h acceleration_wrap.h camera.h
+vkapp_init.o: vkapp_init.cpp vkapp.h shaders/shared_structs.h \
+ buffer_wrap.h descriptor_wrap.h acceleration_wrap.h app.h camera.h \
+ extensions_vk.hpp
+vkapp_postProcess.o: vkapp_postProcess.cpp vkapp.h \
+ shaders/shared_structs.h buffer_wrap.h descriptor_wrap.h \
+ acceleration_wrap.h app.h camera.h extensions_vk.hpp
+extensions_vk.o: extensions_vk.cpp extensions_vk.hpp
+descriptor_wrap.o: descriptor_wrap.cpp vkapp.h shaders/shared_structs.h \
+ buffer_wrap.h descriptor_wrap.h acceleration_wrap.h
+vkapp_raytracing.o: vkapp_raytracing.cpp vkapp.h shaders/shared_structs.h \
+ buffer_wrap.h descriptor_wrap.h acceleration_wrap.h app.h camera.h
+acceleration_wrap.o: acceleration_wrap.cpp acceleration_wrap.h \
+ buffer_wrap.h vkapp.h shaders/shared_structs.h descriptor_wrap.h
+vkapp_denoise.o: vkapp_denoise.cpp vkapp.h shaders/shared_structs.h \
+ buffer_wrap.h descriptor_wrap.h acceleration_wrap.h app.h camera.h
+buffer_wrap.o: buffer_wrap.cpp buffer_wrap.h vkapp.h \
+ shaders/shared_structs.h descriptor_wrap.h acceleration_wrap.h
