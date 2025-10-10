@@ -312,7 +312,7 @@ void VkApp::postProcess()
         #ifdef GUI
         // Important: This is LAST -- so ImGui can overwrite all screen contents.
         ImGui::Render();  // Rendering UI
-        ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_commandBuffer);
+        ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_currentCommandBuffer);
         #endif
     }
     vkCmdEndRenderPass(m_currentCommandBuffer);

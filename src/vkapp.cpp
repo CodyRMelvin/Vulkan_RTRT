@@ -60,7 +60,6 @@ VkApp::VkApp(App* _app) : app(_app)
     createScRenderPass();
     createScDescriptorSet();
     createScPipeline();
-    //loadModel();
 
     // Raycasting ...: Initialize ray tracing capabilities
     // createRtBuffers();
@@ -91,8 +90,8 @@ void VkApp::drawFrame()
         
         // Draw scene
         if (useRaytracer) {
-            raytrace();
-            denoise();
+            //raytrace();
+           // denoise();
         } else
             rasterize();
         
