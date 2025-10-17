@@ -10,4 +10,5 @@
 /src/assimp.dll
 *.user
 *.gfxr
+*.o
 

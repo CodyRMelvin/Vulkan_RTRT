@@ -15,9 +15,9 @@ set( CMAKE_CXX_STANDARD 17 )
 target_compile_features( ${PROJECT_NAME} PUBLIC cxx_std_17 )
 
 set( CMAKE_CXX_FLAGS "-Wall -Werror -Wextra" )
-set( CMAKE_CXX_FLAGS_DEBUG "-O0 -g" )
-set( CMAKE_CXX_FLAGS_RELEASE "-O4 -DNDEBUG" )
-set( CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O4 -g -DNDEBUG" )
+set( CMAKE_CXX_FLAGS_DEBUG "-O0 -g3" )
+set( CMAKE_CXX_FLAGS_RELEASE "-O4" )
+set( CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O4 -g" )
 
 target_include_directories( ${PROJECT_NAME} PRIVATE libs )
 target_link_libraries( ${PROJECT_NAME} PRIVATE libs )

@@ -78,7 +78,6 @@ VkApp::VkApp(App* _app) : app(_app)
 
 void VkApp::drawFrame()
 {
-
     prepareFrame();
     
     VkCommandBufferBeginInfo beginInfo{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
