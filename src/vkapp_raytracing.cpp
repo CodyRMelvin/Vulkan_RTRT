@@ -1,10 +1,13 @@
 
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <array>
 #include <math.h>
+#include <vulkan/vulkan_core.h>
+#include <vulkan/vk_enum_string_helper.h>
 
 #include "vkapp.h"
 
@@ -58,6 +61,8 @@ void VkApp::initRayTracing()
     // acceleration structure), or at program shutdown (when
     // everything else is destroyed).  Both options work for me, but
     // one student found validation errors if done here.
+
+    m_rtBuilder.destroy();
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -107,7 +112,11 @@ void VkApp::createRtPipeline()
     group.intersectionShader = VK_SHADER_UNUSED_KHR;
 
     // Raygen shader stage and group appended to stages and groups lists
+#ifdef _WINDOWS_
     stage.module = createShaderModule(loadFile("spv/raytrace.rgen.spv"));
+#else
+    stage.module = createShaderModule(loadFile("src/spv/raytrace.rgen.spv"));
+#endif
     stage.stage = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
     stages.push_back(stage);
     
@@ -117,7 +126,11 @@ void VkApp::createRtPipeline()
     group.generalShader    = VK_SHADER_UNUSED_KHR;
     
     // Miss shader stage and group appended to stages and groups lists
+#ifdef _WINDOWS_
     stage.module = createShaderModule(loadFile("spv/raytrace.rmiss.spv"));
+#else
+    stage.module = createShaderModule(loadFile("src/spv/raytrace.rmiss.spv"));
+#endif
     stage.stage = VK_SHADER_STAGE_MISS_BIT_KHR;
     stages.push_back(stage);
     
@@ -127,7 +140,11 @@ void VkApp::createRtPipeline()
     group.generalShader    = VK_SHADER_UNUSED_KHR;
     
     // Closest hit shader stage and group appended to stages and groups lists
+#ifdef _WINDOWS_
     stage.module = createShaderModule(loadFile("spv/raytrace.rchit.spv"));
+#else
+    stage.module = createShaderModule(loadFile("src/spv/raytrace.rchit.spv"));
+#endif
     stage.stage = VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
     stages.push_back(stage);
 
@@ -232,9 +249,11 @@ void VkApp::createRtShaderBindingTable()
     uint32_t             dataSize = handleCount * handleSize;
     std::vector<uint8_t> handles(dataSize);
     printf("\n");
-    vkGetRayTracingShaderGroupHandlesKHR(m_device, m_rtPipeline,
+    VkResult result = vkGetRayTracingShaderGroupHandlesKHR(m_device, m_rtPipeline,
                                          0, handleCount, dataSize, handles.data());
     // @@ Verify success of vkGetRayTracingShaderGroupHandlesKHR.
+    if ( result != VK_SUCCESS)
+        throw std::runtime_error( std::string("Failure to get raytracing shader group handles: ") + string_VkResult(result) );
 
     // Allocate a buffer for storing the SBT, and a staging buffer for transferring data to it.
     VkDeviceSize sbtSize = m_rgenRegion.size + m_missRegion.size

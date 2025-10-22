@@ -7,7 +7,7 @@
    
 // Imgui
 // This can be defined for IMGUI, but only after some of the Vulkan initialization is complete.
-#undef GUI
+#define GUI
 
 // Define this to read the San_Miguel model instead of the default living room model.
 //#define SAN_MIGUEL
@@ -267,7 +267,7 @@ public:
                             VkAccessFlagBits newImageAccess,
                             VkImageAspectFlags aspectMask=VK_IMAGE_ASPECT_COLOR_BIT);
     // Run loop 
-    bool useRaytracer = false;
+    bool useRaytracer = true;
     void prepareFrame();
     void ResetRtAccumulation();
     

@@ -136,7 +136,7 @@ void VkApp::createPostPipeline()
     VkShaderModule vertShaderModule = createShaderModule(loadFile("spv/post.vert.spv"));
     VkShaderModule fragShaderModule = createShaderModule(loadFile("spv/post.frag.spv"));
 #else
-    VkShaderModule vertShaderModule = createShaderModule(loadFile("src/spv/post.vert.spv"));
+    VkShaderModule vertShaderModule = createShaderModule(loadFile("src/spv/post.vert.spv")); 
     VkShaderModule fragShaderModule = createShaderModule(loadFile("src/spv/post.frag.spv"));
 #endif
 
@@ -269,7 +269,7 @@ std::string VkApp::loadFile(const std::string& filename)
     std::ifstream stream(filename, std::ios::ate | std::ios::binary);  //ate: Open at file end
 
     if(!stream.is_open())
-        throw std::runtime_error("Can not open a shader file.\n");
+        throw std::runtime_error( std::string("Can not open shader file: ") + filename + "\n" );
 
     result.reserve(stream.tellg()); // tellg() is last char position in file (i.e.,  length)
 
