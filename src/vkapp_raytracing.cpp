@@ -380,6 +380,9 @@ void VkApp::raytrace()
     // PathTracing, History, and Denoise will modify this structure.
     
     // @@ Raycasting:	As directed in the project 3 document, provide 3 temporary light values.
+    m_pcRay.scLightPos = scLightPos;
+    m_pcRay.scLightInt = scLightInt;
+    m_pcRay.scLightAmb = scLightAmb;
     // @@ Pathtracing:	As directed in the project 4 document, remove 3 temporary light values.
     // @@ History:	As directed in the project 5 document, ...
     // @@ Denoise:	As directed in the project 6 document, ...

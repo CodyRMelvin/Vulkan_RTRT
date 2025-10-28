@@ -82,9 +82,9 @@ struct PushConstantRaster
 struct PushConstantRay
 {
     // @@ Raycasting:	Declare 3 temporary light values.  
-    //   ALIGNAS(16) vec3 scLightPos;
-    //   ALIGNAS(16) vec3 scLightInt;
-    //   ALIGNAS(16) vec3 scLightAmb;
+    ALIGNAS(16) vec3 scLightPos;
+    ALIGNAS(16) vec3 scLightInt;
+    ALIGNAS(16) vec3 scLightAmb;
     // @@ Pathtracing:	Remove those 3 temporary light values. 
     // @@ History:	 ...
     // @@ Denoise:	 ...
@@ -118,11 +118,11 @@ struct PushConstantDenoise
 
 struct RayPayload
 {
-    bool hit;           // Does the ray intersect anything or not?
-    vec3 hitPos;	// The world coordinates of the hit point.      
-    int instanceIndex;  // Index of the object instance hit (we have only one, so =0)
-    int primitiveIndex; // Index of the hit triangle primitive within object
-    vec3 bc;            // Barycentric coordinates of the hit point within triangle
+    ALIGNAS(4)  bool hit;           // Does the ray intersect anything or not?
+    ALIGNAS(16) vec3 hitPos;	    // The world coordinates of the hit point.      
+    ALIGNAS(4)  int instanceIndex;  // Index of the object instance hit (we have only one, so =0)
+    ALIGNAS(4)  int primitiveIndex; // Index of the hit triangle primitive within object
+    ALIGNAS(16) vec3 bc;            // Barycentric coordinates of the hit point within triangle
 };
 
 #endif
