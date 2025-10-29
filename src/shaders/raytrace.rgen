@@ -40,29 +40,38 @@ layout(buffer_reference, scalar) buffer MatIndices {int i[]; }; // Material ID f
 vec3 EvalBrdf(vec3 N, vec3 L, vec3 V, Material mat) 
 { 
     /*
-     * theta = angle between V N
-     * cos(theta) = V * N / ||V|| ||N||
+     *                     D(H) F(L, H) G(L, V, H)     K_d
+     * BRDF = (N dot L) + ------------------------- + -----
+     *                      4 (L dot N) (V dot N)      pi
+     * 
+     *         alpha + 2
+     * D(H) = -----------(N dot H)^alpha
+     *            2pi
+     * alpha = shininess
      *
-     * BRDF = f_r(L, V)cos(theta)
+     * F(L, H) = K_s + (1 - K_s)(1 - L dot H)^5
      *
-     *              k_s * D(V, H)     k_d
-     * f_r(L, V) = --------------- + -----
-     *                 4pi(N*L)       pi
+     *      G(L, V, H)               1
+     * -------------------- ~= -------------
+     *  (L dot N)(V dot N)      (L dot H)^2
      *
-     * D(V, H) = dot(V, H)^n
-     * n = "shininess"
      */
 
     const float PI = 3.1415926535897932384626433832795;
-    float cosTheta = dot( V, N ) / ( length(V) * length(N) );
     vec3 LV = L + V;
     vec3 H = (LV) / length(LV);
-    float termD = pow( dot( V, H ), mat.shininess );
+    float dotLH = dot( L, H );
 
-    vec3 f_r = mat.specular * termD / ( 4 * PI * dot( N, L ) );
-    f_r += mat.diffuse / PI;
-    
-    return f_r * cosTheta;
+    float termD = ( mat.shininess + 2 ) / ( 2 * PI ); 
+    termD *= pow( dot( N, H ), mat.shininess );
+
+    vec3 termF = mat.specular + ( 1 - mat.specular ) * pow( 1 - dotLH, 5 );
+
+    float termOcc = 1 / pow( dotLH, 2 );
+
+    vec3 BRDF = dot( N, L ) + mat.diffuse / PI + termD * termF / 4 * termOcc;
+
+    return BRDF;
 }
 
 // @@ Pathtracing: Write SampleBrdf, PdfBrdf, ...

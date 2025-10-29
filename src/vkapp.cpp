@@ -89,7 +89,7 @@ void VkApp::drawFrame()
         
         // Draw scene
         if (useRaytracer) {
-            //raytrace();
+            raytrace();
            // denoise();
         } else
             rasterize();
