@@ -47,6 +47,7 @@ vec3 EvalBrdf(vec3 N, vec3 L, vec3 V, Material mat)
      *         alpha + 2
      * D(H) = -----------(N dot H)^alpha
      *            2pi
+     *
      * alpha = shininess
      *
      * F(L, H) = K_s + (1 - K_s)(1 - L dot H)^5
@@ -67,9 +68,9 @@ vec3 EvalBrdf(vec3 N, vec3 L, vec3 V, Material mat)
 
     vec3 termF = mat.specular + ( 1 - mat.specular ) * pow( 1 - dotLH, 5 );
 
-    float termOcc = 1 / pow( dotLH, 2 );
+    float termOcc = 1 / ( dotLH * dotLH );
 
-    vec3 BRDF = dot( N, L ) + mat.diffuse / PI + termD * termF / 4 * termOcc;
+    vec3 BRDF = mat.diffuse / PI + termD * termF * termOcc / 4;
 
     return BRDF;
 }
@@ -204,8 +205,8 @@ void main()
             vec3 Wo = -rayDirection;
             vec3 LIGHT = pcRay.scLightInt;
 
-            C += LIGHT * dot(N, Wi) * EvalBrdf(N, Wi, Wo, mat);
-            //C += abs(nrm);
+            C += LIGHT * max( dot(N, Wi), 0 ) * EvalBrdf(N, Wi, Wo, mat);
+            //C += abs(nrm) ;//* EvalBrdf( N, Wi, Wo, mat );
         // Data for the calculation:
         //   Normal N = normalize(nrm) 
         //   Light input direction Wi = normalize(pcRay.scLightPos-payload.hitPos)
