@@ -82,10 +82,13 @@ struct PushConstantRaster
 struct PushConstantRay
 {
     // @@ Raycasting:	Declare 3 temporary light values.  
-    ALIGNAS(16) vec3 scLightPos;
-    ALIGNAS(16) vec3 scLightInt;
-    ALIGNAS(16) vec3 scLightAmb;
+    // ALIGNAS(16) vec3 scLightPos;
+    // ALIGNAS(16) vec3 scLightInt;
+    // ALIGNAS(16) vec3 scLightAmb;
     // @@ Pathtracing:	Remove those 3 temporary light values. 
+    ALIGNAS(4) int frameSeed;
+    ALIGNAS(4) float rr;
+    ALIGNAS(4) int depth;
     // @@ History:	 ...
     // @@ Denoise:	 ...
     ALIGNAS(4) bool clear;  // Tell the ray generation shader to start accumulation from scratch
