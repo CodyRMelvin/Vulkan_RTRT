@@ -30,6 +30,8 @@ struct Emitter
     vec3 v1;
     vec3 v2;
     vec3 emission;              // Its emission color
+    vec3 normal;
+    float area;
 };
 
 // Uniform buffer set at each frame

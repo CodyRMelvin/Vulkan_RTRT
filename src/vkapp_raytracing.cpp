@@ -70,18 +70,39 @@ void VkApp::initRayTracing()
 //
 void VkApp::createRtDescriptorSet()
 {
-    m_rtDesc.setBindings(m_device, {
-            {0, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1,  // TLAS
-             VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR},
-            {1, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1,  // Col output image
-             VK_SHADER_STAGE_RAYGEN_BIT_KHR},
-        });
+    m_rtDesc.setBindings
+    (
+        m_device, 
+        {
+            { 
+                  0
+                , VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR
+                , 1
+                ,  /* TLAS */ VK_SHADER_STAGE_RAYGEN_BIT_KHR 
+                | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR
+            },
+            {
+                  1
+                , VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+                , 1
+                ,  /* Col output image */ VK_SHADER_STAGE_RAYGEN_BIT_KHR
+            },
+            {
+                  2
+                , VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+                , 1
+                , VK_SHADER_STAGE_RAYGEN_BIT_KHR
+                | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+            }
+        }
+    );
     
 
     // Note: This will grow to include more buffers.
 
-    m_rtDesc.write(m_device, 0, m_rtBuilder.getAccelerationStructure());
-    m_rtDesc.write(m_device, 1, m_rtColCurrBuffer.Descriptor());
+    m_rtDesc.write( m_device, 0, m_rtBuilder.getAccelerationStructure() );
+    m_rtDesc.write( m_device, 1, m_rtColCurrBuffer.Descriptor() );
+    m_rtDesc.write( m_device, 2, m_lightBuff.buffer );
     //@@ Destroy the descriptor set with: m_rtDesc.destroy(m_device)
 
 }

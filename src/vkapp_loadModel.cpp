@@ -168,10 +168,33 @@ bool VkApp::loadModel(const std::string& filename, glm::mat4 transform)
             emitter.v2 = meshdata.vertices[ meshdata.indices[ 3 * i + 2 ] ].pos;
             emitter.emission = 4.f * mat.emission; 
             emitter.index = i;
+            vec3 crossProduct = glm::cross( ( emitter.v1 - emitter.v0 ), ( emitter.v2 - emitter.v0 ) );
+            emitter.normal = glm::normalize( crossProduct );
+            emitter.area = glm::length( crossProduct / 2.f );
 
             lightList.push_back(emitter);
         }
     }
+
+    initBufferWrap
+    ( 
+        m_lightBuff
+        , sizeof( lightList[0] ) * lightList.size()
+        , VK_BUFFER_USAGE_STORAGE_BUFFER_BIT 
+        | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+        , VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+    );
+
+    VkCommandBuffer commandBuffer = createTempCmdBuffer();
+    vkCmdUpdateBuffer
+    ( 
+              commandBuffer
+            , m_lightBuff.buffer
+            , 0
+            , sizeof( lightList[0] ) * lightList.size()
+            , lightList.data() 
+    );
+    submitTempCmdBuffer(commandBuffer);
     
 #ifdef SAN_MIGUEL
     // The San_Miguel model has many useless lights. The myloadModel
