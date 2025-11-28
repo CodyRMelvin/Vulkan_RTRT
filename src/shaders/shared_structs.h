@@ -126,6 +126,7 @@ struct RayPayload
     ALIGNAS(4)  int instanceIndex;  // Index of the object instance hit (we have only one, so =0)
     ALIGNAS(4)  int primitiveIndex; // Index of the hit triangle primitive within object
     ALIGNAS(16) vec3 bc;            // Barycentric coordinates of the hit point within triangle
+    ALIGNAS(4)  uint seed;
 };
 
 #endif
