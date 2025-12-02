@@ -308,7 +308,7 @@ void main()
         {
             vec3 N = normalize(nrm);
             vec3 Wo = -rayDirection;
-            vec3 f = EvalBrdf( N, Wi, Wo, mat );
+            vec3 f = dot( N, Wi ) * EvalBrdf( N, Wi, Wo, mat );
             float p = PdfLight(point) / GeometryFactor( payload.hitPos, N, point.P, point.N );
             C += .5 * W * f / p * EvalLight(point);
         }
@@ -338,7 +338,7 @@ void main()
         Wi = SampleBrdf( payload.seed, N );
         vec3 Wo = -rayDirection;
 
-        vec3 f = EvalBrdf( N, Wi, Wo, mat );
+        vec3 f = dot( N, Wi ) * EvalBrdf( N, Wi, Wo, mat );
         float p = PdfBrdf( N, Wi ) * pcRay.rr;
         if ( p < .000001 )
             break;
