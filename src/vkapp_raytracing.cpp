@@ -30,8 +30,13 @@ void VkApp::createRtBuffers()
     VkImageAspectFlagBits aspect = VK_IMAGE_ASPECT_COLOR_BIT;
     VkImageLayout layout = VK_IMAGE_LAYOUT_GENERAL;
 
-    initImageWrap(m_rtColCurrBuffer, m_windowSize, format, flags, mem, aspect, layout);
+    initImageWrap( m_rtColCurrBuffer, m_windowSize, format, flags, mem, aspect, layout );
     // Here will be 5 more buffers similarly created with initImageWrap.
+    initImageWrap( m_rtKdCurrBuffer , m_windowSize, format, flags, mem, aspect, layout );
+    initImageWrap( m_rtNdCurrBuffer , m_windowSize, format, flags, mem, aspect, layout );
+    initImageWrap( m_rtColPrevBuffer, m_windowSize, format, flags, mem, aspect, layout );
+    initImageWrap( m_rtKdPrevBuffer , m_windowSize, format, flags, mem, aspect, layout );
+    initImageWrap( m_rtNdPrevBuffer , m_windowSize, format, flags, mem, aspect, layout );
 
     // @@ Destroy with m_rtColCurrBuffer.destroy(m_device) and eventually 5 more destroy calls.
 }
