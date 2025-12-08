@@ -25,6 +25,7 @@ void drawGUI(VkApp& VK)
 
     // An example check box:
     ImGui::Checkbox("Ray Tracer mode", &VK.useRaytracer);
+    ImGui::Checkbox("Denoise", &VK.useDenoiser);
 
     // An example slider:
     if (ImGui::SliderFloat("Exposure", &VK.m_pcRay.exposure, 0.5f, 8.0f, "%.5f"))

@@ -268,6 +268,7 @@ public:
                             VkImageAspectFlags aspectMask=VK_IMAGE_ASPECT_COLOR_BIT);
     // Run loop 
     bool useRaytracer = true;
+    bool useDenoiser = true;
     void prepareFrame();
     void ResetRtAccumulation();
     
