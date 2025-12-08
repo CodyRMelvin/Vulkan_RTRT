@@ -61,8 +61,13 @@ void VkApp::createDenoiseCompPipeline()
     VkComputePipelineCreateInfo cpCreateInfo{VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO};
     cpCreateInfo.layout = m_denoiseCompPipelineLayout;
 
+    #ifdef _WINDOWS_ 
     cpCreateInfo.stage = createShaderStageInfo(loadFile("spv/denoise.comp.spv"),
                                                VK_SHADER_STAGE_COMPUTE_BIT);
+    #else
+    cpCreateInfo.stage = createShaderStageInfo(loadFile("src/spv/denoise.comp.spv"),
+                                               VK_SHADER_STAGE_COMPUTE_BIT);
+    #endif
     vkCreateComputePipelines(m_device, {}, 1, &cpCreateInfo, nullptr, &m_denoisePipeline);
     vkDestroyShaderModule(m_device, cpCreateInfo.stage.module, nullptr);
 
