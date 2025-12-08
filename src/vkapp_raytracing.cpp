@@ -98,7 +98,37 @@ void VkApp::createRtDescriptorSet()
                 , 1
                 , VK_SHADER_STAGE_RAYGEN_BIT_KHR
                 | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-            }
+            },
+            {
+                  3
+                , VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+                , 1
+                , VK_SHADER_STAGE_RAYGEN_BIT_KHR
+            },
+            {
+                  4
+                , VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+                , 1
+                , VK_SHADER_STAGE_RAYGEN_BIT_KHR
+            },
+            {
+                  5
+                , VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+                , 1
+                , VK_SHADER_STAGE_RAYGEN_BIT_KHR
+            },
+            {
+                  6
+                , VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+                , 1
+                , VK_SHADER_STAGE_RAYGEN_BIT_KHR
+            },
+            {
+                  7
+                , VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+                , 1
+                , VK_SHADER_STAGE_RAYGEN_BIT_KHR
+            },
         }
     );
     
@@ -108,6 +138,11 @@ void VkApp::createRtDescriptorSet()
     m_rtDesc.write( m_device, 0, m_rtBuilder.getAccelerationStructure() );
     m_rtDesc.write( m_device, 1, m_rtColCurrBuffer.Descriptor() );
     m_rtDesc.write( m_device, 2, m_lightBuff.buffer );
+    m_rtDesc.write( m_device, 3, m_rtKdCurrBuffer.Descriptor() );
+    m_rtDesc.write( m_device, 4, m_rtNdCurrBuffer.Descriptor() );
+    m_rtDesc.write( m_device, 5, m_rtColPrevBuffer.Descriptor() );
+    m_rtDesc.write( m_device, 6, m_rtKdPrevBuffer.Descriptor() );
+    m_rtDesc.write( m_device, 7, m_rtNdPrevBuffer.Descriptor() );
     //@@ Destroy the descriptor set with: m_rtDesc.destroy(m_device)
 
 }
@@ -458,5 +493,8 @@ void VkApp::raytrace()
     //    m_rtColCurrBuffer ==>  m_rtColPrevBuffer;
     //    m_rtKdCurrBuffer  ==>  m_rtKdPrevBuffer
     //    m_rtNdCurrBuffer  ==>  m_rtNdPrevBuffer
+    CmdCopyImage( m_rtColCurrBuffer, m_rtColPrevBuffer );
+    CmdCopyImage( m_rtKdCurrBuffer , m_rtKdPrevBuffer );
+    CmdCopyImage( m_rtNdCurrBuffer , m_rtNdPrevBuffer );
 }
 
