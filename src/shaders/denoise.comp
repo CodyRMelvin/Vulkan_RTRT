@@ -21,10 +21,17 @@ void main()
     // Values associated with the central pixel
     // @@ Calculate/read each of these for the CENTRAL PIXEL at gpos
     // cKd = read kdBuff at gpos, clamp value to vec3(0.1) or above
+    vec3 cKd = imageLoad( kdBuff, gpos ).xyz;
+    cKd = max( cKd, vec3(0.1) );
     // cVal = read .xyz of inImage at gpos;  the pixel value to be denoised
+    vec3 cVal = imageLoad( inImage, gpos ).xyz;
     // cDem = cVal/cKd;  The pixel value demodulated.
+    vec3 cDem = cVal / cKd;
     // cNrm   = read ndBuff .xyz at gpos
     // cDepth = read ndBuff .w at gpos
+    vec4 cNd = imageLoad( ndBuff, gpos );
+    vec3 cNrm = normalize( cNd.xyz );
+    float cDepth = cNd.w;
     
     vec3 numerator = vec3(0.0);
     float denominator = 0.0;
@@ -51,10 +58,46 @@ void main()
     // Then sum this pixel's contribution to both the numerator and denominator
     // numerator += pDem * weight;
     // denominator += weight;
-    
-    
-    // vec3 outVal = cKd*numerator/denominator; // Re-modulate the weighted average color
-    // if (the denominator is zero, just use outVal = cVal;
 
-    // imageStore(outImage, gpos, vec4(outVal,0));
+    for( int i = -2; i <= 2; ++i )
+    {
+        float h_weight = gaussian[ i + 2 ];
+
+        for ( int j = -2; j <= 2; ++j )
+        {
+            ivec2 offset = ivec2( i, j ) * pc.stepwidth; // Offset of 5x5 pixels **with holes**
+
+            vec3 pKd = imageLoad( kdBuff, gpos + offset ).xyz;
+            pKd = max( pKd, vec3(0.1) );
+
+            vec3 pVal = imageLoad( inImage, gpos + offset ).xyz;
+
+            vec3 pDem = pVal / pKd;
+
+            vec4 pNd = imageLoad( ndBuff, gpos + offset );
+            vec3 pNrm = normalize( pNd.xyz );
+            float pDepth = pNd.w;
+
+            float v_weight = gaussian[ j + 2 ];
+
+            float t_1 = cDepth - pDepth;
+            float d_weight = pc.depthFactor == 0 ? 1 : exp( -( t_1 * t_1 ) / pc.depthFactor );
+
+            vec3 t_2 = cNrm - pNrm;
+            float d = dot( t_2, t_2 ) / ( pc.stepwidth * pc.stepwidth );
+            float n_weight = pc.normFactor == 0 ? 1 : exp( -d / pc.normFactor );
+
+            float weight = h_weight * v_weight * d_weight * n_weight;
+            numerator += pDem * weight;
+            denominator += weight;
+        }
+    }
+    
+    // if (the denominator is zero, just use outVal = cVal;
+    vec3 outVal = denominator == 0 ? cVal : cKd * numerator / denominator; // Re-modulate the weighted average color
+
+    if( !any( isnan(outVal) ) && !any( isinf(outVal) ) ) 
+        imageStore( outImage, gpos, vec4( outVal, 0 ) );
+    //else
+        //imageStore( outImage, gpos, vec4( 0, 0, 1, 1 ) );
 }

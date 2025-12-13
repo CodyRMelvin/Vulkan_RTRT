@@ -97,6 +97,8 @@ void VkApp::denoise()
 
         // Tell the A-Trous algorithm its "hole" size
         m_pcDenoise.stepwidth = stepwidth;
+        m_pcDenoise.normFactor = 0.003;
+        m_pcDenoise.depthFactor = 0.007;
         stepwidth *= 2;
 
         // Select the compute shader, and its descriptor set and push constant
@@ -126,5 +128,6 @@ void VkApp::denoise()
         // the input buffer (m_renderTarget) for the next denoising
         // loop pass.  See VkApp::raytrace for 4 examples of using
         // VkApp::CmdCopyImage to copy an image.
+        VkApp:CmdCopyImage( m_denoiseBuffer, m_renderTarget );
     }
 }
